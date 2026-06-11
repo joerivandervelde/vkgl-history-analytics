@@ -237,6 +237,13 @@ public class ConsensusLevelVKGLHistoryAnalytics {
                        // && clv.releaseClassification.containsKey(CURRENT_RELEASE)
                        // && clv.releaseClassification.get(CURRENT_RELEASE).equals("CF")
 
+                       // Variants VUS in every single release
+                       // && clv.releaseClassification.containsKey(CURRENT_RELEASE) // sanity check
+                       // && clv.releaseClassification.size()==26 // update when more releases are added !
+                       // && differentialClassifications.contains("VUS")
+                       // && !differentialClassifications.contains("LP")
+                       // && !differentialClassifications.contains("LB")
+
                        // Other examples:
                        // && SAID.genes.contains(clv.gene)
                        // && differentialClassifications.size() > 1

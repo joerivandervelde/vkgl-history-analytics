@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class ConsensusLevelVKGLHistoryAnalytics {
 
-    private static final String CURRENT_RELEASE = "july2025";
+    private static final String CURRENT_RELEASE = "apr2026";
 
     private File vkglHistory;
     private File outputDataFrame;

@@ -20,6 +20,7 @@ public class MergeDataSets {
         String ACCEPTABLE_HEADER_1 = "ID\tlabel\tchromosome\tstart\tstop\tref\talt\tc_notation\tp_notation\thgvs\tgene\tclassification\tsupport";
         String ACCEPTABLE_HEADER_2 = "ID\tlabel\tchromosome\tstart\tstop\tref\talt\tc_notation\tp_notation\ttranscript\thgvs\tgene\tclassification\tsupport";
         String ACCEPTABLE_HEADER_3 = "ID\tlabel\tchromosome\tstart\tstop\tref\talt\tc_notation\tp_notation\ttranscript\thgvs\tgene\tclassification\tsupport\tgene_id_entrez_gene";
+        String ACCEPTABLE_HEADER_4 = "variant\tchromosome\tstart\tstop\tref\talt\tgene\tcDNA\ttranscript\tprotein\thgvs\tconsensusClassification\tsupportingLabs\tid";
         String OUTPUT_FILE_NAME = "allReleasesCombined.tsv";
         String OUTPUT_FILE_HEADER = "Release\tID\tlabel\tchromosome\tstart\tstop\tref\talt\tc_notation\tp_notation\ttranscript\thgvs\tgene\tclassification\tsupport";
 
@@ -72,7 +73,11 @@ public class MergeDataSets {
             }else if(header.equals(ACCEPTABLE_HEADER_3))
             {
                 headerType = 3;
-            }else
+            }else if(header.equals(ACCEPTABLE_HEADER_4))
+            {
+                headerType = 4;
+            }
+            else
             {
                 throw new Exception("header not OK: " + header);
             }
@@ -137,17 +142,7 @@ public class MergeDataSets {
                         // cleaning: replace some terms with LP / LB
                         else if(i == 11)
                         {
-                            String classification =  lineSplit[i];
-                            if(classification.equalsIgnoreCase("(Likely) Pathogenic")){
-                                classification = "LP";
-                            }
-                            else if(classification.equalsIgnoreCase("(Likely) benign")){
-                                classification = "LB";
-                            }
-                            if(!classification.equals("LP") && !classification.equals("LB") && !classification.equals("VUS"))
-                            {
-                                throw new Exception("classification unknown: " + classification);
-                            }
+                            String classification = fixClassificationLabel(lineSplit[i]);
                             sb.append("\t" + classification);
 
                         }else{
@@ -182,6 +177,29 @@ public class MergeDataSets {
                     }
                     bw.write(sb + System.lineSeparator());
                 }
+                else if((headerType == 4 && lineSplit.length==14))
+                {
+                    sb.append(releaseName);
+                    sb.append("\t" + lineSplit[13]); // id
+                    sb.append("\t" + lineSplit[0]); // label (now called 'variant')
+                    sb.append("\t" + lineSplit[1]); // chromosome
+                    sb.append("\t" + lineSplit[2]); // start
+                    sb.append("\t" + lineSplit[3]); // stop
+                    sb.append("\t" + lineSplit[4]); // ref
+                    sb.append("\t" + lineSplit[5]); // alt
+                    sb.append("\t" + lineSplit[7]); // c_notation
+                    sb.append("\t" + lineSplit[9]); // p_notation
+                    sb.append("\t" + lineSplit[8]); // transcript
+                    sb.append("\t" + lineSplit[10]); // hgvs
+                    sb.append("\t" + lineSplit[6]); // gene
+                    sb.append("\t" + fixClassificationLabel(lineSplit[11])); // classification
+                    sb.append("\t" + lineSplit[12]); // supporting labs
+                    if(lineSplit[1].equals("MT"))
+                    {
+                       throw new Exception("Bad chromosome: " + lineSplit[1]);
+                    }
+                    bw.write(sb + System.lineSeparator());
+                }
                 else{
                     throw new Exception("problem with the data: " + line + " has " + lineSplit.length + " values");
                 }
@@ -192,6 +210,20 @@ public class MergeDataSets {
         bw.close();
 
         System.out.println("Done! Completed in " + ((System.nanoTime()-start)/1000000)+"ms.");
+    }
+
+    public static String fixClassificationLabel(String classification) throws Exception {
+        if(classification.equalsIgnoreCase("(Likely) Pathogenic")){
+            classification = "LP";
+        }
+        else if(classification.equalsIgnoreCase("(Likely) benign")){
+            classification = "LB";
+        }
+        if(!classification.equals("LP") && !classification.equals("LB") && !classification.equals("VUS"))
+        {
+            throw new Exception("classification unknown: " + classification);
+        }
+        return classification;
     }
 
 }

@@ -4,6 +4,7 @@ require(ggplot2)
 require(ggalluvial)
 require(RColorBrewer)
 require(plyr)
+library(scales)
 
 setwd("/Users/joeri/VKGL/VKGL-releases/apr2026")
 curRel <- "apr2026"
@@ -29,6 +30,7 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
   scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 10), labels = scales::comma) +
   labs(x = "Release date of variant classification database", y = "Number of variants") +
 #ggtitle(paste("Classification history of all variants in the VKGL ",curRelFull," public consensus release", sep=""))
 #ggsave(paste("vkgl-",curRel,".png", sep=""), width = 11, height = 6)
@@ -55,6 +57,7 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
   scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 10), labels = scales::comma) +
   labs(x = "Release date of VKGL variant classification database export (public consensus)", y = "Number of variants") +
 #ggtitle(paste("History of variants in the VKGL ",curRelFull," public consensus release with any lifetime LP-to-LB or LB-to-LP transition",sep=""))
 #ggsave(paste("vkgl-",curRel,"-lp-lb-trans.png",sep=""), width = 11, height = 7)
@@ -80,9 +83,10 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
   theme(legend.title = element_blank(), panel.grid = element_blank(), panel.border = element_rect(colour = "black"), axis.ticks = element_line(colour = "black"), axis.text = element_text(color = "black")) +
   theme(legend.position = "bottom") +
   scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 10), labels = scales::comma) +
   labs(x = "Release date of VKGL variant classification database export (public consensus)", y = "Number of variants") +
 #ggtitle(paste("History of variants in the VKGL ",curRelFull," public consensus release with multiple classifications", sep=""))
-#ggsave(paste("vkgl-",curRel,"-multiclass.png", sep=""), width = 11, height = 8)
+#ggsave(paste("vkgl-",curRel,"-multiclass.png", sep=""), width = 11, height = 6)
 
 #ggtitle(paste("History of SAID gene panel indel variants in the VKGL ",curRelFull," public consensus release", sep=""))
 #ggsave(paste("vkgl-",curRel,"-said-indels.png", sep=""), width = 11, height = 8)

@@ -38,6 +38,9 @@ ggplot(vch, aes(x = Release, stratum = Consensus, alluvium = Id, fill = Consensu
 
 #ggtitle(paste("History of variants that have appeared in the VKGL public consensus that are not part of the ",curRelFull," release", sep=""))
 #ggsave(paste("vkgl-notin",curRel,".png",sep=""), width = 11, height = 6)
+  
+#ggtitle(paste("History of variants that appeared with multiple classifications in any VKGL public consensus release", sep=""))
+#ggsave(paste("vkgl-",curRel,"-multiclass-any-rel.png", sep=""), width = 11, height = 8)
 
 ---  
 
